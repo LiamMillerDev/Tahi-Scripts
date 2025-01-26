@@ -1,12 +1,10 @@
 # Dependencies
 node_modules/
 
-# Build output
-dist/
+# Development files
+.cursorrules
 
 # Tests
 tests/
 
-# Cursor rules
-.cursorrules
 
