@@ -8,10 +8,10 @@ Include the desired feature in your Webflow project using jsDelivr CDN:
 
 ```html
 <!-- Latest version -->
-<script src="https://cdn.jsdelivr.net/gh/liammillerdev/webflow-scripts@latest/[feature-name].js"></script>
+<script src="https://cdn.jsdelivr.net/gh/LiamMillerDev/Tahi-Scripts@latest/[feature-name].js"></script>
 
 <!-- Specific version -->
-<script src="https://cdn.jsdelivr.net/gh/liammillerdev/webflow-scripts@v1.0.0/[feature-name].js"></script>
+<script src="https://cdn.jsdelivr.net/gh/LiamMillerDev/Tahi-Scripts@v1.0.0/[feature-name].js"></script>
 ```
 
 ## Available Features
@@ -25,8 +25,8 @@ Each feature is documented in its own directory under `src/features/`:
 
 1. Clone the repository
 ```bash
-git clone https://github.com/liammillerdev/tahi-scripts.git
-cd webflow-scripts
+git clone https://github.com/LiamMillerDev/Tahi-Scripts.git
+cd tahi-scripts
 ```
 
 2. Install dependencies

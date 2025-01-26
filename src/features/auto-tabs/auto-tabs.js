@@ -3,7 +3,7 @@
  * A lightweight tab rotation system for Webflow
  * @version 1.0.2
  * @author Liam Miller
- * @repository https://github.com/liammillerdev/webflow-scripts
+ * @repository https://github.com/LiamMillerDev/Tahi-Scripts
  */
 
 class AutoTabs {

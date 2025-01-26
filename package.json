@@ -1,5 +1,5 @@
 {
-  "name": "@liammillerdev/webflow-scripts",
+  "name": "@liammillerdev/tahi-scripts",
   "version": "1.0.0",
   "description": "Collection of utility functions for Webflow projects",
   "main": "index.js",
@@ -8,7 +8,7 @@
   },
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/liammillerdev/webflow-scripts.git"
+    "url": "git+https://github.com/LiamMillerDev/Tahi-Scripts.git"
   },
   "keywords": [
     "webflow",
