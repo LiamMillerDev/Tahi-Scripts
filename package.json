@@ -1,0 +1,23 @@
+{
+  "name": "@liammillerdev/webflow-scripts",
+  "version": "1.0.0",
+  "description": "Collection of utility functions for Webflow projects",
+  "main": "index.js",
+  "scripts": {
+    "build": "node build.js"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/liammillerdev/webflow-scripts.git"
+  },
+  "keywords": [
+    "webflow",
+    "utilities",
+    "javascript"
+  ],
+  "author": "Liam Miller",
+  "license": "MIT",
+  "devDependencies": {
+    "terser": "^5.19.2"
+  }
+} 
