@@ -1,7 +1,7 @@
 /**
  * Before-After Comparison
  * A lightweight image comparison system for Webflow
- * @version 1.0.4
+ * @version 1.0.5
  * @author Liam Miller
  * @repository https://github.com/LiamMillerDev/Tahi-Scripts
  */
@@ -84,23 +84,19 @@ class BeforeAfter {
     if (this.state.initialized) return;
     this.state.initialized = true;
     
-    // Only set essential styles for functionality
+    // Only set essential positioning styles
     this.wrapper.style.position = 'relative';
     this.wrapper.style.overflow = 'hidden';
     
-    // Minimal styles for image wrappers
+    // Position image wrappers
     [this.beforeEl, this.afterEl].forEach(el => {
       el.style.position = 'absolute';
-      el.style.width = '100%';
-      el.style.height = '100%';
-      el.style.top = '0';
-      el.style.left = '0';
+      el.style.inset = '0';
     });
     
-    // Minimal slider styles
+    // Only set essential slider positioning
     this.sliderEl.style.position = 'absolute';
     this.sliderEl.style.zIndex = '2';
-    this.sliderEl.style.cursor = this.config.direction === 'vertical' ? 'ns-resize' : 'ew-resize';
     
     // Set initial position
     this.updatePosition(this.config.initialPosition);
@@ -205,26 +201,12 @@ class BeforeAfter {
         // Horizontal slider (default)
         this.beforeEl.style.clipPath = `inset(0 ${100 - position}% 0 0)`;
         this.sliderEl.style.left = `${position}%`;
-        // Don't override height if set in Webflow
-        if (!this.sliderEl.style.height) {
-          this.sliderEl.style.height = '100%';
-        }
-        // Only set width if not set in Webflow
-        if (!this.sliderEl.style.width) {
-          this.sliderEl.style.width = '4px';
-        }
+        this.sliderEl.style.top = '0';
       } else {
         // Vertical slider
         this.beforeEl.style.clipPath = `inset(0 0 ${100 - position}% 0)`;
         this.sliderEl.style.top = `${position}%`;
-        // Don't override width if set in Webflow
-        if (!this.sliderEl.style.width) {
-          this.sliderEl.style.width = '100%';
-        }
-        // Only set height if not set in Webflow
-        if (!this.sliderEl.style.height) {
-          this.sliderEl.style.height = '4px';
-        }
+        this.sliderEl.style.left = '0';
       }
     });
   }
