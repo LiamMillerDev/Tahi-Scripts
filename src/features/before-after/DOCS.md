@@ -1,290 +1,113 @@
-# Before-After Comparison Documentation
+# Before-After Comparison
 
-## Minimal Working Example
+## Installation
+```html
+<script src="https://cdn.jsdelivr.net/gh/LiamMillerDev/Tahi-Scripts@latest/dist/before-after.js"></script>
+```
 
+## Attributes Reference
+
+### Required Attributes
 ```html
 <div ts-compare="true">
-  <div ts-before>
-    <img src="before.jpg" alt="Before">
-  </div>
-  <div ts-slider></div>
-  <div ts-after>
-    <img src="after.jpg" alt="After">
-  </div>
+  <div ts-before>...</div>
+  <div ts-slider>...</div>
+  <div ts-after>...</div>
 </div>
 ```
 
+### Optional Attributes
+```html
+<!-- Direction (default: horizontal) -->
+<div ts-compare="true" ts-direction="horizontal">...</div>
+<div ts-compare="true" ts-direction="vertical">...</div>
+
+<!-- Starting Position (0-100, default: 50) -->
+<div ts-compare="true" ts-initial-position="30">...</div>
+```
+
+## Structural CSS for Webflow
+
+Copy this into your Webflow custom code to handle the core positioning:
+
 ```css
-/* Only required CSS */
+/* Core Structure */
+[ts-compare] {
+  position: relative;
+}
+
+[ts-before],
+[ts-after] {
+  width: 100%;
+  height: 100%;
+}
+
+[ts-before] {
+  position: absolute;
+  top: 0;
+  left: 0;
+}
+
+[ts-after] {
+  position: relative;
+}
+
 [ts-slider] {
-  background: white;
-  /* Vertical slider (default) */
-  height: 4px;
-  /* OR Horizontal slider */
-  /* width: 4px; */
+  position: absolute;
+  z-index: 2;
+}
+
+/* Direction-specific slider positioning */
+[ts-direction="horizontal"] [ts-slider] {
+  top: 0;
+  height: 100%;
+}
+
+[ts-direction="vertical"] [ts-slider] {
+  left: 0;
+  width: 100%;
+}
+
+/* Prevent unwanted interactions */
+[ts-before] img,
+[ts-after] img {
+  pointer-events: none;
+  user-select: none;
 }
 ```
 
-## Installation
+## Features
 
-Add the script to your Webflow project's before </body> tag:
+1. **Click and Drag**:
+   - Drag slider
+   - Click anywhere to move slider
+   - Touch support for mobile
+   - Double-click to reset
 
-```html
-<script src="https://cdn.jsdelivr.net/gh/LiamMillerDev/Tahi-Scripts@v1.0.2/dist/before-after.js"></script>
-```
-
-## Configuration
-
-### Required Attributes
-- `ts-compare="true"`: On the container
-- `ts-before`: On the before image wrapper
-- `ts-after`: On the after image wrapper
-- `ts-slider`: On the slider element
-
-### Optional Attributes
-- `ts-direction="horizontal"`: For horizontal sliding (default is vertical)
-- `ts-initial-position="30"`: Starting position in percentage (default: 50)
-
-## Webflow Setup Guide
-
-1. Create the structure:
-   ```
-   Container (Div Block)
-   ├── Before Wrapper (Div Block)
-   │   └── Image
-   ├── Slider (Div Block)
-   └── After Wrapper (Div Block)
-       └── Image
-   ```
-
-2. Add attributes:
-   - Container: `ts-compare="true"`
-   - Before wrapper: `ts-before`
-   - After wrapper: `ts-after`
-   - Slider: `ts-slider`
-
-3. Style only what's needed:
-   - Container: Set desired width/height
-   - Images: No special styling needed (script handles sizing)
-   - Slider: Set background color and width/height
+2. **Script Handles**:
+   - Positioning logic
+   - Interaction behavior
+   - Image clipping
+   - Drag functionality
 
 ## Common Issues
 
-1. "Missing required elements" error:
-   - Ensure all required attributes are added
-   - Check that both before/after wrappers contain images
-   - Verify slider element exists
+1. **Missing Elements Error**:
+   - Check all required attributes are added
+   - Verify images exist in before/after wrappers
+   - Ensure slider element exists
 
-2. Images not aligning:
-   - Images are automatically set to cover the container
-   - Ensure container has explicit dimensions
-   - Use same aspect ratio images for best results
+2. **Images Not Aligning**:
+   - Set explicit container dimensions
+   - Use same aspect ratio images
+   - Container needs height
 
-3. Slider not visible:
-   - Add background color to slider
-   - Set appropriate width/height based on direction
-   - Vertical: Set width to 100% and height to 2-4px
-   - Horizontal: Set height to 100% and width to 2-4px
-
-## Example Setups
-
-### Vertical Slider (Default)
-```html
-<div ts-compare="true" style="height: 400px;">
-  <div ts-before>
-    <img src="before.jpg" alt="Before">
-  </div>
-  <div ts-slider style="background: white; height: 4px;"></div>
-  <div ts-after>
-    <img src="after.jpg" alt="After">
-  </div>
-</div>
-```
-
-### Horizontal Slider
-```html
-<div ts-compare="true" ts-direction="horizontal" style="height: 400px;">
-  <div ts-before>
-    <img src="before.jpg" alt="Before">
-  </div>
-  <div ts-slider style="background: white; width: 4px;"></div>
-  <div ts-after>
-    <img src="after.jpg" alt="After">
-  </div>
-</div>
-```
-
-## HTML Structure
-
-Basic structure with all features enabled:
-
-```html
-<div ts-compare="true" ts-show-percentage="true" ts-initial-position="50">
-  <!-- Before Image/Content -->
-  <div ts-before>
-    <img src="before-image.jpg" alt="Before">
-  </div>
-  
-  <!-- After Image/Content -->
-  <div ts-after>
-    <img src="after-image.jpg" alt="After">
-  </div>
-  
-  <!-- Slider Element -->
-  <div ts-slider>
-    <!-- Custom slider design in Webflow -->
-  </div>
-  
-  <!-- Optional: Percentage Display -->
-  <div ts-percentage>50%</div>
-</div>
-```
-
-## Configuration
-
-### Required Attributes
-- `ts-compare="true"`: Enables the comparison functionality
-- `ts-before`: Identifies the before content container
-- `ts-after`: Identifies the after content container
-- `ts-slider`: Identifies the slider element
-
-### Optional Attributes
-- `ts-direction`: Set comparison direction ("vertical"/"horizontal", default: "vertical")
-- `ts-show-percentage`: Toggle percentage display (true/false, default: false)
-- `ts-initial-position`: Starting position in percentage (default: 50)
-- `ts-percentage`: Identifies the percentage display element
-
-## Webflow Setup Guide
-
-1. Create the basic structure:
-   - Add a container div
-   - Inside it, add two divs for before/after content
-   - Add a div for the slider
-   - Optionally, add a div for percentage display
-
-2. Add the required attributes:
-   - On the container: `ts-compare="true"`
-   - On the before div: `ts-before`
-   - On the after div: `ts-after`
-   - On the slider div: `ts-slider`
-   - Optional: On percentage div: `ts-percentage`
-
-3. Style your elements:
-   - The script handles core positioning
-   - Style the slider however you want (it will be positioned automatically)
-   - Style the percentage display if used
-   - Images/content in before/after divs should be same size
-
-4. Configure behavior (optional):
-   - Add `ts-direction="horizontal"` for horizontal sliding (vertical is default)
-   - Add `ts-show-percentage="true"` to show percentage
-   - Add `ts-initial-position="30"` to set starting position
-
-## Styling Examples
-
-### Vertical Slider (Default)
-```css
-/* Default vertical slider */
-[ts-slider] {
-  width: 100%;
-  height: 4px;
-  background: white;
-  cursor: ns-resize;
-}
-```
-
-### Horizontal Slider
-```css
-/* Optional horizontal slider */
-[ts-direction="horizontal"] [ts-slider] {
-  width: 4px;
-  height: 100%;
-  background: white;
-  cursor: ew-resize;
-}
-```
-
-### Percentage Display
-```css
-[ts-percentage] {
-  padding: 4px 8px;
-  background: rgba(0,0,0,0.5);
-  color: white;
-  border-radius: 4px;
-}
-```
-
-## Interaction Features
-
-1. **Click and Drag**:
-   - Click and hold the slider to drag
-   - Smooth transition while dragging
-   - Touch support for mobile devices
-
-2. **Click Position**:
-   - Click anywhere on the image to move slider
-   - Smooth transition to clicked position
-   - Works with both horizontal and vertical modes
-
-3. **Reset Position**:
-   - Double-click to reset to initial position
-   - Smooth transition on reset
-
-## Styling in Webflow
-
-The script handles core positioning, but you can style everything else:
-
-```css
-/* Example custom styles */
-[ts-slider] {
-  /* Your slider styles */
-  width: 4px;
-  height: 100%;
-  background: white;
-  cursor: grab;
-}
-
-[ts-percentage] {
-  /* Your percentage display styles */
-  padding: 4px 8px;
-  background: rgba(0,0,0,0.5);
-  color: white;
-  border-radius: 4px;
-}
-```
+3. **Slider Not Visible**:
+   - Add background color in Webflow
+   - Set width/height based on direction
+   - Horizontal: Set width (height is automatic)
+   - Vertical: Set height (width is automatic)
 
 ## Browser Support
-- Chrome (last 2 versions)
-- Firefox (last 2 versions)
-- Safari (last 2 versions)
-- Edge (last 2 versions)
-- Mobile browsers with touch support
-
-## Performance Considerations
-
-1. **Image Optimization**:
-   - Use appropriately sized images
-   - Compress images appropriately
-   - Consider lazy loading for multiple instances
-
-2. **Interaction Performance**:
-   - Uses requestAnimationFrame for smooth animations
-   - Optimized touch events for mobile
-   - Efficient DOM updates
-
-## Best Practices
-
-1. **Image Preparation**:
-   - Use same-sized images for before/after
-   - Ensure images are properly aligned
-   - Optimize for web delivery
-
-2. **Responsive Design**:
-   - Works automatically with responsive images
-   - Test across all breakpoints
-   - Consider touch target sizes on mobile
-
-3. **Accessibility**:
-   - Provide meaningful alt text for images
-   - Consider ARIA labels for interaction
-   - Test keyboard navigation 
+- Modern browsers (Chrome, Firefox, Safari, Edge)
+- Mobile browsers with touch support 

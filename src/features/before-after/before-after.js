@@ -35,26 +35,17 @@ class BeforeAfter {
     
     // Initialize if elements exist
     if (this.beforeEl && this.afterEl && this.sliderEl) {
-      // Wait for images to load
-      this.waitForImages().then(() => {
-        this.init();
-      }).catch(err => {
-        console.warn('BeforeAfter: Error loading images -', err);
-      });
+      this.waitForImages().then(() => this.init());
     }
   }
   
   waitForImages() {
-    return new Promise((resolve, reject) => {
+    return new Promise((resolve) => {
       const beforeImg = this.beforeEl.querySelector('img');
       const afterImg = this.afterEl.querySelector('img');
       
-      if (!beforeImg) {
-        reject('Missing before image');
-        return;
-      }
-      if (!afterImg) {
-        reject('Missing after image');
+      if (!beforeImg || !afterImg) {
+        resolve();
         return;
       }
       
@@ -70,13 +61,7 @@ class BeforeAfter {
       if (afterImg.complete) checkLoaded();
       else afterImg.onload = checkLoaded;
       
-      // Fallback if images fail to load
-      setTimeout(() => {
-        if (loadedImages < 2) {
-          console.warn('BeforeAfter: Image load timeout - proceeding anyway');
-          resolve();
-        }
-      }, 2000);
+      setTimeout(resolve, 2000);
     });
   }
   
@@ -167,10 +152,8 @@ class BeforeAfter {
   
   handleDrag(e) {
     if (!this.state.isDragging) return;
-    
     e.preventDefault();
-    const position = this.calculatePosition(e);
-    this.updatePosition(position);
+    this.updatePosition(this.calculatePosition(e));
   }
   
   handleDragEnd() {
@@ -179,10 +162,9 @@ class BeforeAfter {
   }
   
   handleClick(e) {
-    if (e.target === this.sliderEl) return;
-    
-    const position = this.calculatePosition(e);
-    this.updatePosition(position);
+    if (e.target !== this.sliderEl) {
+      this.updatePosition(this.calculatePosition(e));
+    }
   }
   
   handleReset() {
@@ -195,12 +177,9 @@ class BeforeAfter {
     const clientX = isTouch ? e.touches[0].clientX : e.clientX;
     const clientY = isTouch ? e.touches[0].clientY : e.clientY;
     
-    let position;
-    if (this.config.direction === 'horizontal') {
-      position = ((clientX - bounds.left) / bounds.width) * 100;
-    } else {
-      position = ((clientY - bounds.top) / bounds.height) * 100;
-    }
+    const position = this.config.direction === 'horizontal'
+      ? ((clientX - bounds.left) / bounds.width) * 100
+      : ((clientY - bounds.top) / bounds.height) * 100;
     
     return Math.max(0, Math.min(100, position));
   }
@@ -247,17 +226,14 @@ class BeforeAfter {
 
 // Auto-initialize with a small delay to ensure DOM is ready
 document.addEventListener('DOMContentLoaded', () => {
-  // First attempt
-  initializeComparisons();
+  const init = () => {
+    document.querySelectorAll('[ts-compare="true"]').forEach(element => {
+      if (!element.beforeAfter) {
+        element.beforeAfter = new BeforeAfter(element);
+      }
+    });
+  };
   
-  // Second attempt after a delay (for dynamic content)
-  setTimeout(initializeComparisons, 1000);
-});
-
-function initializeComparisons() {
-  document.querySelectorAll('[ts-compare="true"]').forEach(element => {
-    if (!element.beforeAfter) {
-      element.beforeAfter = new BeforeAfter(element);
-    }
-  });
-} 
+  init();
+  setTimeout(init, 1000);
+}); 
