@@ -10,8 +10,8 @@ class BeforeAfter {
   constructor(element) {
     // Core elements
     this.wrapper = element;
-    this.beforeEl = this.wrapper.querySelector('.before-after_before');
-    this.afterEl = this.wrapper.querySelector('.before-after_after');
+    this.beforeEl = this.wrapper.querySelector('[ts-before]');
+    this.afterEl = this.wrapper.querySelector('[ts-after]');
     this.sliderEl = this.wrapper.querySelector('[ts-slider]');
     this.percentageEl = this.wrapper.querySelector('[ts-percentage]');
     
@@ -38,6 +38,30 @@ class BeforeAfter {
   }
   
   init() {
+    // Set initial styles
+    this.wrapper.style.position = 'relative';
+    this.wrapper.style.overflow = 'hidden';
+    
+    this.beforeEl.style.position = 'absolute';
+    this.beforeEl.style.top = '0';
+    this.beforeEl.style.left = '0';
+    this.beforeEl.style.width = '100%';
+    this.beforeEl.style.height = '100%';
+    
+    this.afterEl.style.position = 'absolute';
+    this.afterEl.style.top = '0';
+    this.afterEl.style.left = '0';
+    this.afterEl.style.width = '100%';
+    this.afterEl.style.height = '100%';
+    
+    this.sliderEl.style.position = 'absolute';
+    this.sliderEl.style.zIndex = '10';
+    
+    if (this.percentageEl) {
+      this.percentageEl.style.position = 'absolute';
+      this.percentageEl.style.zIndex = '11';
+    }
+    
     // Set initial position
     this.updatePosition(this.config.initialPosition);
     

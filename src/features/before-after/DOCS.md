@@ -5,7 +5,7 @@
 Add the script to your Webflow project's before </body> tag:
 
 ```html
-<script src="https://cdn.jsdelivr.net/gh/tahistudio/webflow-scripts@latest/before-after.js"></script>
+<script src="https://cdn.jsdelivr.net/gh/LiamMillerDev/Tahi-Scripts@main/dist/before-after.js"></script>
 ```
 
 ## HTML Structure
@@ -13,40 +13,68 @@ Add the script to your Webflow project's before </body> tag:
 Basic structure with all features enabled:
 
 ```html
-<div class="before-after_wrapper" ts-compare="true" ts-direction="horizontal" ts-show-percentage="true" ts-initial-position="50">
+<div ts-compare="true" ts-direction="horizontal" ts-show-percentage="true" ts-initial-position="50">
   <!-- Before Image/Content -->
-  <div class="before-after_before">
+  <div ts-before>
     <img src="before-image.jpg" alt="Before">
   </div>
   
   <!-- After Image/Content -->
-  <div class="before-after_after">
+  <div ts-after>
     <img src="after-image.jpg" alt="After">
   </div>
   
   <!-- Slider Element -->
-  <div class="before-after_slider" ts-slider="true">
+  <div ts-slider>
     <!-- Custom slider design in Webflow -->
   </div>
   
   <!-- Optional: Percentage Display -->
-  <div class="before-after_percentage" ts-percentage="true">50%</div>
+  <div ts-percentage>50%</div>
 </div>
 ```
 
 ## Configuration
 
-### Attributes
-All attributes use the `ts-` prefix for consistency:
-
-- `ts-compare`: Enable comparison functionality (true/false)
-- `ts-direction`: Set comparison direction ("horizontal"/"vertical")
-- `ts-show-percentage`: Toggle percentage display (true/false)
-- `ts-initial-position`: Starting position in percentage (default: 50)
+### Required Attributes
+- `ts-compare="true"`: Enables the comparison functionality
+- `ts-before`: Identifies the before content container
+- `ts-after`: Identifies the after content container
 - `ts-slider`: Identifies the slider element
+
+### Optional Attributes
+- `ts-direction`: Set comparison direction ("horizontal"/"vertical", default: "horizontal")
+- `ts-show-percentage`: Toggle percentage display (true/false, default: false)
+- `ts-initial-position`: Starting position in percentage (default: 50)
 - `ts-percentage`: Identifies the percentage display element
 
-### Interaction Modes
+## Webflow Setup Guide
+
+1. Create the basic structure:
+   - Add a container div
+   - Inside it, add two divs for before/after content
+   - Add a div for the slider
+   - Optionally, add a div for percentage display
+
+2. Add the required attributes:
+   - On the container: `ts-compare="true"`
+   - On the before div: `ts-before`
+   - On the after div: `ts-after`
+   - On the slider div: `ts-slider`
+   - Optional: On percentage div: `ts-percentage`
+
+3. Style your elements:
+   - The script handles core positioning
+   - Style the slider however you want (it will be positioned automatically)
+   - Style the percentage display if used
+   - Images/content in before/after divs should be same size
+
+4. Configure behavior (optional):
+   - Add `ts-direction="vertical"` for vertical sliding
+   - Add `ts-show-percentage="true"` to show percentage
+   - Add `ts-initial-position="30"` to set starting position
+
+## Interaction Features
 
 1. **Click and Drag**:
    - Click and hold the slider to drag
@@ -58,54 +86,30 @@ All attributes use the `ts-` prefix for consistency:
    - Smooth transition to clicked position
    - Works with both horizontal and vertical modes
 
-### Optional Features
-
-1. **Percentage Display**:
-   - Shows current split percentage
-   - Updates in real-time during interaction
-   - Can be styled via Webflow
-
-2. **Reset Position**:
+3. **Reset Position**:
    - Double-click to reset to initial position
    - Smooth transition on reset
-   - Configurable initial position
 
-## CSS Classes
+## Styling in Webflow
 
-Required Webflow classes:
-- `.before-after_wrapper`: Main component wrapper
-- `.before-after_before`: Before image/content container
-- `.before-after_after`: After image/content container
-- `.before-after_slider`: Slider element
-- `.before-after_percentage`: Percentage display (optional)
-
-## Example CSS
+The script handles core positioning, but you can style everything else:
 
 ```css
-.before-after_wrapper {
-  position: relative;
-  overflow: hidden;
-}
-
-.before-after_before,
-.before-after_after {
-  position: absolute;
-  top: 0;
-  left: 0;
-  width: 100%;
+/* Example custom styles */
+[ts-slider] {
+  /* Your slider styles */
+  width: 4px;
   height: 100%;
+  background: white;
+  cursor: grab;
 }
 
-.before-after_slider {
-  position: absolute;
-  z-index: 10;
-  /* Style in Webflow */
-}
-
-.before-after_percentage {
-  position: absolute;
-  z-index: 11;
-  /* Style in Webflow */
+[ts-percentage] {
+  /* Your percentage display styles */
+  padding: 4px 8px;
+  background: rgba(0,0,0,0.5);
+  color: white;
+  border-radius: 4px;
 }
 ```
 
@@ -120,18 +124,13 @@ Required Webflow classes:
 
 1. **Image Optimization**:
    - Use appropriately sized images
-   - Consider lazy loading for multiple instances
    - Compress images appropriately
+   - Consider lazy loading for multiple instances
 
 2. **Interaction Performance**:
-   - Throttled event handlers
-   - RAF for smooth animations
-   - Touch event optimization
-
-3. **Multiple Instances**:
-   - Each instance is independent
-   - Efficient memory management
-   - Proper cleanup on destroy
+   - Uses requestAnimationFrame for smooth animations
+   - Optimized touch events for mobile
+   - Efficient DOM updates
 
 ## Best Practices
 
@@ -141,11 +140,11 @@ Required Webflow classes:
    - Optimize for web delivery
 
 2. **Responsive Design**:
+   - Works automatically with responsive images
    - Test across all breakpoints
-   - Ensure touch targets are adequate on mobile
-   - Consider different aspect ratios
+   - Consider touch target sizes on mobile
 
 3. **Accessibility**:
-   - Provide meaningful alt text
-   - Ensure keyboard navigation
-   - Consider ARIA labels for interaction 
+   - Provide meaningful alt text for images
+   - Consider ARIA labels for interaction
+   - Test keyboard navigation 
