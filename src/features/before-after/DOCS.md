@@ -5,15 +5,28 @@
 Add the script to your Webflow project's before </body> tag:
 
 ```html
+<!-- Latest version (may be cached by CDN) -->
 <script src="https://cdn.jsdelivr.net/gh/LiamMillerDev/Tahi-Scripts@main/dist/before-after.js"></script>
+
+<!-- Specific version (recommended) -->
+<script src="https://cdn.jsdelivr.net/gh/LiamMillerDev/Tahi-Scripts@v1.0.1/dist/before-after.js"></script>
+
+<!-- Purge cache if needed -->
+<!-- Visit: https://www.jsdelivr.com/tools/purge -->
+<!-- Enter: https://cdn.jsdelivr.net/gh/LiamMillerDev/Tahi-Scripts@v1.0.1/dist/before-after.js -->
 ```
+
+> **Note**: If you're not seeing the latest changes, try:
+> 1. Using the specific version URL (recommended)
+> 2. Purging the CDN cache using jsDelivr's purge tool
+> 3. Adding a cache-busting query parameter: `?v=timestamp`
 
 ## HTML Structure
 
 Basic structure with all features enabled:
 
 ```html
-<div ts-compare="true" ts-direction="horizontal" ts-show-percentage="true" ts-initial-position="50">
+<div ts-compare="true" ts-show-percentage="true" ts-initial-position="50">
   <!-- Before Image/Content -->
   <div ts-before>
     <img src="before-image.jpg" alt="Before">
@@ -43,7 +56,7 @@ Basic structure with all features enabled:
 - `ts-slider`: Identifies the slider element
 
 ### Optional Attributes
-- `ts-direction`: Set comparison direction ("horizontal"/"vertical", default: "horizontal")
+- `ts-direction`: Set comparison direction ("vertical"/"horizontal", default: "vertical")
 - `ts-show-percentage`: Toggle percentage display (true/false, default: false)
 - `ts-initial-position`: Starting position in percentage (default: 50)
 - `ts-percentage`: Identifies the percentage display element
@@ -70,9 +83,43 @@ Basic structure with all features enabled:
    - Images/content in before/after divs should be same size
 
 4. Configure behavior (optional):
-   - Add `ts-direction="vertical"` for vertical sliding
+   - Add `ts-direction="horizontal"` for horizontal sliding (vertical is default)
    - Add `ts-show-percentage="true"` to show percentage
    - Add `ts-initial-position="30"` to set starting position
+
+## Styling Examples
+
+### Vertical Slider (Default)
+```css
+/* Default vertical slider */
+[ts-slider] {
+  width: 100%;
+  height: 4px;
+  background: white;
+  cursor: ns-resize;
+}
+```
+
+### Horizontal Slider
+```css
+/* Optional horizontal slider */
+[ts-direction="horizontal"] [ts-slider] {
+  width: 4px;
+  height: 100%;
+  background: white;
+  cursor: ew-resize;
+}
+```
+
+### Percentage Display
+```css
+[ts-percentage] {
+  padding: 4px 8px;
+  background: rgba(0,0,0,0.5);
+  color: white;
+  border-radius: 4px;
+}
+```
 
 ## Interaction Features
 

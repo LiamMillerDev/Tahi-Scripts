@@ -1,7 +1,7 @@
 /**
  * Before-After Comparison
  * A lightweight image comparison system for Webflow
- * @version 1.0.0
+ * @version 1.0.1
  * @author Liam Miller
  * @repository https://github.com/LiamMillerDev/Tahi-Scripts
  */
@@ -17,7 +17,7 @@ class BeforeAfter {
     
     // Configuration
     this.config = {
-      direction: this.wrapper.getAttribute('ts-direction') || 'horizontal',
+      direction: this.wrapper.getAttribute('ts-direction') || 'vertical',
       showPercentage: this.wrapper.getAttribute('ts-show-percentage') === 'true',
       initialPosition: parseInt(this.wrapper.getAttribute('ts-initial-position')) || 50
     };
