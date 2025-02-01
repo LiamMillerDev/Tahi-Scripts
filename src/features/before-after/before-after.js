@@ -1,7 +1,7 @@
 /**
  * Before-After Comparison
  * A lightweight image comparison system for Webflow
- * @version 1.0.1
+ * @version 1.0.2
  * @author Liam Miller
  * @repository https://github.com/LiamMillerDev/Tahi-Scripts
  */
@@ -13,12 +13,10 @@ class BeforeAfter {
     this.beforeEl = this.wrapper.querySelector('[ts-before]');
     this.afterEl = this.wrapper.querySelector('[ts-after]');
     this.sliderEl = this.wrapper.querySelector('[ts-slider]');
-    this.percentageEl = this.wrapper.querySelector('[ts-percentage]');
     
     // Configuration
     this.config = {
       direction: this.wrapper.getAttribute('ts-direction') || 'vertical',
-      showPercentage: this.wrapper.getAttribute('ts-show-percentage') === 'true',
       initialPosition: parseInt(this.wrapper.getAttribute('ts-initial-position')) || 50
     };
     
@@ -30,37 +28,35 @@ class BeforeAfter {
     };
     
     // Initialize if all required elements exist
-    if (this.beforeEl && this.afterEl && this.sliderEl) {
+    if (this.beforeEl?.querySelector('img') && this.afterEl?.querySelector('img') && this.sliderEl) {
       this.init();
     } else {
-      console.warn('BeforeAfter: Missing required elements');
+      console.warn('BeforeAfter: Missing required elements (container, before/after images, or slider)');
     }
   }
   
   init() {
-    // Set initial styles
+    // Only set essential styles
     this.wrapper.style.position = 'relative';
     this.wrapper.style.overflow = 'hidden';
     
-    this.beforeEl.style.position = 'absolute';
-    this.beforeEl.style.top = '0';
-    this.beforeEl.style.left = '0';
-    this.beforeEl.style.width = '100%';
-    this.beforeEl.style.height = '100%';
+    // Set image wrapper styles
+    [this.beforeEl, this.afterEl].forEach(el => {
+      el.style.position = 'absolute';
+      el.style.inset = '0';
+      // Ensure images fill the container
+      const img = el.querySelector('img');
+      if (img) {
+        img.style.width = '100%';
+        img.style.height = '100%';
+        img.style.objectFit = 'cover';
+      }
+    });
     
-    this.afterEl.style.position = 'absolute';
-    this.afterEl.style.top = '0';
-    this.afterEl.style.left = '0';
-    this.afterEl.style.width = '100%';
-    this.afterEl.style.height = '100%';
-    
+    // Set slider styles
     this.sliderEl.style.position = 'absolute';
-    this.sliderEl.style.zIndex = '10';
-    
-    if (this.percentageEl) {
-      this.percentageEl.style.position = 'absolute';
-      this.percentageEl.style.zIndex = '11';
-    }
+    this.sliderEl.style.zIndex = '2';
+    this.sliderEl.style.cursor = this.config.direction === 'vertical' ? 'ns-resize' : 'ew-resize';
     
     // Set initial position
     this.updatePosition(this.config.initialPosition);
@@ -164,20 +160,14 @@ class BeforeAfter {
       // Update before element clip
       if (this.config.direction === 'horizontal') {
         this.beforeEl.style.clipPath = `inset(0 ${100 - position}% 0 0)`;
+        this.sliderEl.style.left = `${position}%`;
+        this.sliderEl.style.top = '0';
+        this.sliderEl.style.height = '100%';
       } else {
         this.beforeEl.style.clipPath = `inset(0 0 ${100 - position}% 0)`;
-      }
-      
-      // Update slider position
-      if (this.config.direction === 'horizontal') {
-        this.sliderEl.style.left = `${position}%`;
-      } else {
         this.sliderEl.style.top = `${position}%`;
-      }
-      
-      // Update percentage display if enabled
-      if (this.config.showPercentage && this.percentageEl) {
-        this.percentageEl.textContent = `${Math.round(position)}%`;
+        this.sliderEl.style.left = '0';
+        this.sliderEl.style.width = '100%';
       }
     });
   }
@@ -199,7 +189,6 @@ class BeforeAfter {
     this.beforeEl = null;
     this.afterEl = null;
     this.sliderEl = null;
-    this.percentageEl = null;
     this.state = null;
     this.config = null;
   }

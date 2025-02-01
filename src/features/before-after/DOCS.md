@@ -1,25 +1,118 @@
 # Before-After Comparison Documentation
 
+## Minimal Working Example
+
+```html
+<div ts-compare="true">
+  <div ts-before>
+    <img src="before.jpg" alt="Before">
+  </div>
+  <div ts-slider></div>
+  <div ts-after>
+    <img src="after.jpg" alt="After">
+  </div>
+</div>
+```
+
+```css
+/* Only required CSS */
+[ts-slider] {
+  background: white;
+  /* Vertical slider (default) */
+  height: 4px;
+  /* OR Horizontal slider */
+  /* width: 4px; */
+}
+```
+
 ## Installation
 
 Add the script to your Webflow project's before </body> tag:
 
 ```html
-<!-- Latest version (may be cached by CDN) -->
-<script src="https://cdn.jsdelivr.net/gh/LiamMillerDev/Tahi-Scripts@main/dist/before-after.js"></script>
-
-<!-- Specific version (recommended) -->
-<script src="https://cdn.jsdelivr.net/gh/LiamMillerDev/Tahi-Scripts@v1.0.1/dist/before-after.js"></script>
-
-<!-- Purge cache if needed -->
-<!-- Visit: https://www.jsdelivr.com/tools/purge -->
-<!-- Enter: https://cdn.jsdelivr.net/gh/LiamMillerDev/Tahi-Scripts@v1.0.1/dist/before-after.js -->
+<script src="https://cdn.jsdelivr.net/gh/LiamMillerDev/Tahi-Scripts@v1.0.2/dist/before-after.js"></script>
 ```
 
-> **Note**: If you're not seeing the latest changes, try:
-> 1. Using the specific version URL (recommended)
-> 2. Purging the CDN cache using jsDelivr's purge tool
-> 3. Adding a cache-busting query parameter: `?v=timestamp`
+## Configuration
+
+### Required Attributes
+- `ts-compare="true"`: On the container
+- `ts-before`: On the before image wrapper
+- `ts-after`: On the after image wrapper
+- `ts-slider`: On the slider element
+
+### Optional Attributes
+- `ts-direction="horizontal"`: For horizontal sliding (default is vertical)
+- `ts-initial-position="30"`: Starting position in percentage (default: 50)
+
+## Webflow Setup Guide
+
+1. Create the structure:
+   ```
+   Container (Div Block)
+   ├── Before Wrapper (Div Block)
+   │   └── Image
+   ├── Slider (Div Block)
+   └── After Wrapper (Div Block)
+       └── Image
+   ```
+
+2. Add attributes:
+   - Container: `ts-compare="true"`
+   - Before wrapper: `ts-before`
+   - After wrapper: `ts-after`
+   - Slider: `ts-slider`
+
+3. Style only what's needed:
+   - Container: Set desired width/height
+   - Images: No special styling needed (script handles sizing)
+   - Slider: Set background color and width/height
+
+## Common Issues
+
+1. "Missing required elements" error:
+   - Ensure all required attributes are added
+   - Check that both before/after wrappers contain images
+   - Verify slider element exists
+
+2. Images not aligning:
+   - Images are automatically set to cover the container
+   - Ensure container has explicit dimensions
+   - Use same aspect ratio images for best results
+
+3. Slider not visible:
+   - Add background color to slider
+   - Set appropriate width/height based on direction
+   - Vertical: Set width to 100% and height to 2-4px
+   - Horizontal: Set height to 100% and width to 2-4px
+
+## Example Setups
+
+### Vertical Slider (Default)
+```html
+<div ts-compare="true" style="height: 400px;">
+  <div ts-before>
+    <img src="before.jpg" alt="Before">
+  </div>
+  <div ts-slider style="background: white; height: 4px;"></div>
+  <div ts-after>
+    <img src="after.jpg" alt="After">
+  </div>
+</div>
+```
+
+### Horizontal Slider
+```html
+<div ts-compare="true" ts-direction="horizontal" style="height: 400px;">
+  <div ts-before>
+    <img src="before.jpg" alt="Before">
+  </div>
+  <div ts-slider style="background: white; width: 4px;"></div>
+  <div ts-after>
+    <img src="after.jpg" alt="After">
+  </div>
+</div>
+```
 
 ## HTML Structure
 
