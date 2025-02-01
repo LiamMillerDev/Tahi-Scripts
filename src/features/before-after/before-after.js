@@ -1,7 +1,7 @@
 /**
  * Before-After Comparison
  * A lightweight image comparison system for Webflow
- * @version 1.0.6
+ * @version 1.0.7
  * @author Liam Miller
  * @repository https://github.com/LiamMillerDev/Tahi-Scripts
  */
@@ -86,6 +86,7 @@ class BeforeAfter {
     
     // Only set relative positioning on wrapper
     this.wrapper.style.position = 'relative';
+    this.wrapper.style.userSelect = 'none';
     
     // Let the after element stay in normal flow to maintain height
     // Only position the before element absolutely for the overlay
@@ -98,6 +99,16 @@ class BeforeAfter {
     // Position slider absolutely
     this.sliderEl.style.position = 'absolute';
     this.sliderEl.style.zIndex = '2';
+    this.sliderEl.style.cursor = this.config.direction === 'horizontal' ? 'ew-resize' : 'ns-resize';
+    
+    // Prevent image dragging and selection
+    [this.beforeEl, this.afterEl].forEach(el => {
+      const img = el.querySelector('img');
+      if (img) {
+        img.style.pointerEvents = 'none';
+        img.draggable = false;
+      }
+    });
     
     // Set initial position
     this.updatePosition(this.config.initialPosition);
