@@ -1,7 +1,7 @@
 /**
  * Before-After Comparison
  * A lightweight image comparison system for Webflow
- * @version 1.0.3
+ * @version 1.0.4
  * @author Liam Miller
  * @repository https://github.com/LiamMillerDev/Tahi-Scripts
  */
@@ -21,7 +21,7 @@ class BeforeAfter {
     
     // Configuration
     this.config = {
-      direction: this.wrapper.getAttribute('ts-direction') || 'vertical',
+      direction: this.wrapper.getAttribute('ts-direction') || 'horizontal',
       initialPosition: parseInt(this.wrapper.getAttribute('ts-initial-position')) || 50
     };
     
@@ -84,24 +84,20 @@ class BeforeAfter {
     if (this.state.initialized) return;
     this.state.initialized = true;
     
-    // Only set essential styles
+    // Only set essential styles for functionality
     this.wrapper.style.position = 'relative';
     this.wrapper.style.overflow = 'hidden';
     
-    // Set image wrapper styles
+    // Minimal styles for image wrappers
     [this.beforeEl, this.afterEl].forEach(el => {
       el.style.position = 'absolute';
-      el.style.inset = '0';
-      // Ensure images fill the container
-      const img = el.querySelector('img');
-      if (img) {
-        img.style.width = '100%';
-        img.style.height = '100%';
-        img.style.objectFit = 'cover';
-      }
+      el.style.width = '100%';
+      el.style.height = '100%';
+      el.style.top = '0';
+      el.style.left = '0';
     });
     
-    // Set slider styles
+    // Minimal slider styles
     this.sliderEl.style.position = 'absolute';
     this.sliderEl.style.zIndex = '2';
     this.sliderEl.style.cursor = this.config.direction === 'vertical' ? 'ns-resize' : 'ew-resize';
@@ -205,17 +201,30 @@ class BeforeAfter {
     this.state.position = position;
     
     requestAnimationFrame(() => {
-      // Update before element clip
       if (this.config.direction === 'horizontal') {
+        // Horizontal slider (default)
         this.beforeEl.style.clipPath = `inset(0 ${100 - position}% 0 0)`;
         this.sliderEl.style.left = `${position}%`;
-        this.sliderEl.style.top = '0';
-        this.sliderEl.style.height = '100%';
+        // Don't override height if set in Webflow
+        if (!this.sliderEl.style.height) {
+          this.sliderEl.style.height = '100%';
+        }
+        // Only set width if not set in Webflow
+        if (!this.sliderEl.style.width) {
+          this.sliderEl.style.width = '4px';
+        }
       } else {
+        // Vertical slider
         this.beforeEl.style.clipPath = `inset(0 0 ${100 - position}% 0)`;
         this.sliderEl.style.top = `${position}%`;
-        this.sliderEl.style.left = '0';
-        this.sliderEl.style.width = '100%';
+        // Don't override width if set in Webflow
+        if (!this.sliderEl.style.width) {
+          this.sliderEl.style.width = '100%';
+        }
+        // Only set height if not set in Webflow
+        if (!this.sliderEl.style.height) {
+          this.sliderEl.style.height = '4px';
+        }
       }
     });
   }
