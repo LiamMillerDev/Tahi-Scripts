@@ -1,0 +1,775 @@
+<style>
+/* Form Visualizer Styles */
+.section_form-visualizer {
+  display: flex;
+  gap: 2rem;
+  padding: 2rem;
+  max-width: 1200px;
+  margin: 0 auto;
+  position: relative;
+}
+
+/* Mobile-first responsive layout */
+@media (max-width: 768px) {
+  .section_form-visualizer {
+    flex-direction: column;
+    padding: 1rem;
+    gap: 1.5rem;
+  }
+  
+  .button_clear {
+    position: relative;
+    top: 0;
+    right: 0;
+    width: 100%;
+    margin-bottom: 1rem;
+  }
+}
+
+.button_clear {
+  position: absolute;
+  top: 1rem;
+  right: 2rem;
+  padding: 0.5rem 1rem;
+  background: #e2e8f0;
+  border: none;
+  border-radius: 4px;
+  color: #4a5568;
+  font-weight: 500;
+  cursor: pointer;
+  transition: background-color 0.2s ease;
+}
+
+.button_clear:hover {
+  background: #cbd5e0;
+}
+
+/* Form Styles */
+.component_form {
+  flex: 0 0 450px;
+  padding: 2.5rem;
+  background: #ffffff;
+  border-radius: 12px;
+  box-shadow: 0 8px 16px rgba(0, 0, 0, 0.1);
+}
+
+@media (max-width: 768px) {
+  .component_form {
+    flex: none;
+    width: 100%;
+    padding: 1.5rem;
+  }
+  
+  .form_input {
+    font-size: 1rem;
+    padding: 0.875rem 1rem;
+  }
+  
+  .form_button {
+    padding: 0.875rem 1.25rem;
+    font-size: 1rem;
+  }
+}
+
+.form_step {
+  display: none;
+  opacity: 0;
+  transform: translateY(10px);
+  transition: all 0.3s ease;
+}
+
+.form_step.is-active {
+  display: block;
+  opacity: 1;
+  transform: translateY(0);
+}
+
+.form_input-wrapper {
+  display: flex;
+  flex-direction: column;
+  gap: 1.25rem;
+  margin-bottom: 2rem;
+}
+
+.form_input {
+  width: 100%;
+  padding: 1rem 1.25rem;
+  border: 2px solid #e2e8f0;
+  border-radius: 8px;
+  font-size: 1.125rem;
+  transition: all 0.3s ease;
+  background: #ffffff;
+}
+
+.form_input:focus {
+  border-color: #4299e1;
+  box-shadow: 0 0 0 3px rgba(66, 153, 225, 0.15);
+  outline: none;
+}
+
+.form_input.is-valid {
+  border-color: #48bb78;
+  background-color: #f0fff4;
+}
+
+.form_input.is-invalid {
+  border-color: #f56565;
+  background-color: #fff5f5;
+}
+
+.form_input[ts-email].is-disabled {
+  background-color: #f8fafc;
+  border-color: #cbd5e0;
+  color: #718096;
+  cursor: not-allowed;
+  opacity: 0.8;
+  font-style: italic;
+  padding-left: 2.5rem;
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='16' height='16' viewBox='0 0 24 24' fill='none' stroke='%23718096' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='M12 17h.01'/%3E%3Cpath d='M12 3a9 9 0 0 1 9 9v.75c0 .41-.34.75-.75.75H3.75a.75.75 0 0 1-.75-.75V12a9 9 0 0 1 9-9z'/%3E%3C/svg%3E");
+  background-repeat: no-repeat;
+  background-position: 0.75rem center;
+}
+
+.form_button-wrapper {
+  display: flex;
+  gap: 1rem;
+}
+
+.form_button {
+  flex: 1;
+  padding: 1rem 1.5rem;
+  border: none;
+  border-radius: 8px;
+  font-weight: 600;
+  font-size: 1.125rem;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  position: relative;
+  overflow: hidden;
+}
+
+.button_next, 
+.button_submit {
+  background-color: #4299e1;
+  color: white;
+  display: block;
+  width: 100%;
+}
+
+.button_next:hover,
+.button_submit:hover {
+  background-color: #3182ce;
+  transform: translateY(-1px);
+  box-shadow: 0 4px 6px rgba(66, 153, 225, 0.2);
+}
+
+/* Progress indicator */
+.form_progress {
+  display: flex;
+  justify-content: space-between;
+  margin-bottom: 2rem;
+  position: relative;
+  padding: 0 1rem;
+}
+
+@media (max-width: 480px) {
+  .form_progress {
+    margin-bottom: 1.5rem;
+  }
+  
+  .progress_step {
+    width: 24px;
+    height: 24px;
+    font-size: 0.75rem;
+  }
+}
+
+.form_progress::before {
+  content: '';
+  position: absolute;
+  top: 50%;
+  left: 2rem;
+  right: 2rem;
+  height: 3px;
+  background: #e2e8f0;
+  transform: translateY(-50%);
+  z-index: 0;
+  border-radius: 3px;
+}
+
+.progress_step {
+  width: 32px;
+  height: 32px;
+  border-radius: 50%;
+  background: #fff;
+  border: 3px solid #e2e8f0;
+  position: relative;
+  z-index: 1;
+  transition: all 0.3s ease;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: #718096;
+  font-weight: 600;
+  font-size: 0.875rem;
+}
+
+.progress_step::before {
+  content: attr(data-step);
+}
+
+.progress_step.is-complete {
+  background: #4299e1;
+  border-color: #4299e1;
+  color: white;
+}
+
+.progress_step.is-active {
+  border-color: #4299e1;
+  color: #4299e1;
+  box-shadow: 0 0 0 4px rgba(66, 153, 225, 0.15);
+}
+
+/* Visualization Styles */
+.component_visualizations {
+  flex: 1;
+  min-height: 500px;
+}
+
+@media (max-width: 768px) {
+  .component_visualizations {
+    min-height: auto;
+  }
+  
+  .tabs_menu {
+    overflow-x: auto;
+    -webkit-overflow-scrolling: touch;
+    padding-bottom: 0.5rem;
+    margin-bottom: 1.5rem;
+  }
+  
+  .tab_button {
+    white-space: nowrap;
+    padding: 0.5rem 0.75rem;
+  }
+}
+
+.tabs_menu {
+  display: flex;
+  gap: 0.5rem;
+  margin-bottom: 2rem;
+  border-bottom: 2px solid #e2e8f0;
+  padding-bottom: 0.5rem;
+}
+
+.tab_button {
+  padding: 0.5rem 1rem;
+  border: none;
+  background: none;
+  color: #4a5568;
+  font-weight: 500;
+  cursor: pointer;
+  transition: color 0.2s ease;
+}
+
+.tab_button.is-active {
+  color: #4299e1;
+  border-bottom: 2px solid #4299e1;
+  margin-bottom: -0.5rem;
+}
+
+.tabs_content {
+  position: relative;
+  min-height: 400px;
+}
+
+.tab_content {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  opacity: 0;
+  visibility: hidden;
+  transition: opacity 0.3s ease;
+}
+
+.tab_content.is-active {
+  opacity: 1;
+  visibility: visible;
+}
+
+/* CRM View Styles */
+.crm_contact {
+  padding: 2rem;
+  background: #ffffff;
+  border-radius: 12px;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.05);
+  margin-bottom: 1.5rem;
+  border: 1px solid #e2e8f0;
+}
+
+@media (max-width: 768px) {
+  .crm_contact {
+    padding: 1.25rem;
+  }
+  
+  .crm_field {
+    flex-direction: column;
+    gap: 0.5rem;
+  }
+  
+  .crm_label {
+    flex: none;
+  }
+}
+
+.crm_field {
+  display: flex;
+  gap: 1.5rem;
+  margin-bottom: 1rem;
+  padding: 0.75rem;
+  border-radius: 8px;
+  transition: background-color 0.2s ease;
+}
+
+.crm_field:hover {
+  background-color: #f7fafc;
+}
+
+.crm_label {
+  flex: 0 0 120px;
+  color: #718096;
+  font-weight: 500;
+  font-size: 0.875rem;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+}
+
+.crm_value {
+  color: #2d3748;
+  font-weight: 500;
+  font-size: 1rem;
+}
+
+.crm_value::after {
+  content: '';
+  position: absolute;
+  right: -2px;
+  top: 50%;
+  transform: translateY(-50%);
+  width: 2px;
+  height: 16px;
+  background: #4299e1;
+  animation: blink 0.7s infinite;
+  opacity: 0;
+}
+
+.crm_value.is-typing::after {
+  opacity: 1;
+}
+
+@keyframes blink {
+  0%, 100% { opacity: 1; }
+  50% { opacity: 0; }
+}
+
+/* Pipeline Styles */
+.pipeline_board {
+  display: flex;
+  gap: 1.5rem;
+  overflow-x: auto;
+  padding: 0.5rem 0.25rem 1.5rem;
+  -webkit-overflow-scrolling: touch;
+  scroll-snap-type: x mandatory;
+}
+
+@media (max-width: 768px) {
+  .pipeline_board {
+    gap: 1rem;
+    padding-bottom: 1rem;
+  }
+  
+  .pipeline_column {
+    flex: 0 0 280px;
+    scroll-snap-align: start;
+  }
+  
+  /* Add visual scroll indicator */
+  .pipeline_board::after {
+    content: '';
+    flex: 0 0 1px;
+  }
+}
+
+.pipeline_column {
+  flex: 0 0 280px;
+  background: #f8fafc;
+  border-radius: 12px;
+  padding: 1.25rem;
+  scroll-snap-align: start;
+  border: 1px solid #e2e8f0;
+}
+
+.pipeline_header {
+  font-size: 1rem;
+  font-weight: 600;
+  color: #2d3748;
+  margin-bottom: 1.25rem;
+  padding-bottom: 0.75rem;
+  border-bottom: 2px solid #e2e8f0;
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+.pipeline_header::before {
+  content: '';
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  background: currentColor;
+}
+
+.pipeline_cards {
+  min-height: 100px;
+}
+
+.pipeline_card {
+  background: white;
+  border-radius: 8px;
+  padding: 1.25rem;
+  margin-bottom: 0.75rem;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
+  border: 1px solid #e2e8f0;
+  transition: all 0.3s ease;
+}
+
+.pipeline_card:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+}
+
+.card_name {
+  font-weight: 600;
+  color: #2d3748;
+  margin-bottom: 0.5rem;
+}
+
+.card_title {
+  color: #4a5568;
+  margin-bottom: 2rem;
+  font-weight: 500;
+}
+
+.card_company {
+  font-size: 0.875rem;
+  color: #4a5568;
+  margin-bottom: 0.5rem;
+}
+
+.card_email {
+  font-size: 0.875rem;
+  color: #4299e1;
+}
+
+/* Business Card Styles */
+.business_card {
+  width: 100%;
+  max-width: 450px;
+  aspect-ratio: 1.586;
+  background: linear-gradient(135deg, #ffffff 0%, #f7fafc 100%);
+  border-radius: 16px;
+  box-shadow: 0 8px 16px rgba(0, 0, 0, 0.1);
+  padding: 3rem;
+  margin: 0 auto;
+  position: relative;
+  overflow: hidden;
+  border: 1px solid rgba(226, 232, 240, 0.8);
+}
+
+.business_card::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  right: 0;
+  width: 150px;
+  height: 150px;
+  background: linear-gradient(135deg, rgba(66, 153, 225, 0.1) 0%, rgba(66, 153, 225, 0) 100%);
+  border-radius: 0 16px 0 100%;
+}
+
+.card_name {
+  font-size: 2rem;
+  font-weight: 700;
+  color: #2d3748;
+  margin-bottom: 0.75rem;
+  line-height: 1.2;
+}
+
+.card_title {
+  font-size: 1.125rem;
+  color: #4a5568;
+  margin-bottom: 2rem;
+  font-weight: 500;
+}
+
+.card_company {
+  font-size: 1.25rem;
+  font-weight: 600;
+  color: #2d3748;
+  margin-bottom: 0.75rem;
+}
+
+.card_email {
+  color: #4299e1;
+  font-size: 1rem;
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+.card_email::before {
+  content: '';
+  width: 16px;
+  height: 16px;
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%234299e1' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z'%3E%3C/path%3E%3Cpolyline points='22,6 12,13 2,6'%3E%3C/polyline%3E%3C/svg%3E");
+  background-size: contain;
+  background-repeat: no-repeat;
+}
+
+/* Loading Overlay Styles */
+.loading-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: rgba(255, 255, 255, 0.95);
+  display: none;
+  justify-content: center;
+  align-items: center;
+  z-index: 1000;
+}
+
+.loading-overlay.is-active {
+  display: flex;
+}
+
+.loading-content {
+  text-align: center;
+}
+
+.loading-spinner {
+  width: 40px;
+  height: 40px;
+  border: 3px solid #e2e8f0;
+  border-radius: 50%;
+  border-top-color: #4299e1;
+  animation: spin 0.8s ease-in-out infinite;
+  margin: 0 auto 1rem;
+}
+
+.loading-text {
+  color: #2d3748;
+  font-size: 0.875rem;
+  font-weight: 500;
+}
+
+@keyframes spin {
+  0% { transform: rotate(0deg); }
+  100% { transform: rotate(360deg); }
+}
+
+.page-refresh {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: white;
+  opacity: 0;
+  pointer-events: none;
+  z-index: 999;
+}
+
+/* Add completion message styles */
+.completion_message {
+  text-align: center;
+  padding: 2rem;
+}
+
+.completion_message h3 {
+  font-size: 1.5rem;
+  color: #2d3748;
+  margin-bottom: 1.5rem;
+  font-weight: 600;
+}
+
+.completion_button {
+  display: inline-block;
+  padding: 1rem 2rem;
+  background: #4299e1;
+  color: white;
+  text-decoration: none;
+  border-radius: 8px;
+  font-weight: 600;
+  transition: all 0.3s ease;
+}
+
+.completion_button:hover {
+  background: #3182ce;
+  transform: translateY(-2px);
+  box-shadow: 0 4px 6px rgba(66, 153, 225, 0.2);
+}
+
+/* Add smooth scrolling for touch devices */
+@media (hover: none) {
+  .pipeline_board {
+    scroll-behavior: smooth;
+  }
+}
+
+/* Add scrollbar styles for better visibility */
+.pipeline_board::-webkit-scrollbar {
+  height: 6px;
+}
+
+.pipeline_board::-webkit-scrollbar-track {
+  background: #f1f5f9;
+  border-radius: 3px;
+}
+
+.pipeline_board::-webkit-scrollbar-thumb {
+  background: #cbd5e0;
+  border-radius: 3px;
+}
+
+/* Enhance touch targets for mobile */
+@media (max-width: 768px) {
+  .tab_button,
+  .form_button,
+  .button_clear {
+    min-height: 44px;
+  }
+  
+  .form_input {
+    min-height: 44px;
+  }
+}
+</style>
+
+<!-- Form Visualizer Section -->
+<div class="section_form-visualizer">
+  <button class="button_clear" ts-clear>Clear All</button>
+  
+  <!-- Form Component -->
+  <div class="component_form">
+    <div class="form_progress">
+      <div class="progress_step is-active" data-step="1"></div>
+      <div class="progress_step" data-step="2"></div>
+      <div class="progress_step" data-step="3"></div>
+      <div class="progress_step" data-step="4"></div>
+    </div>
+
+    <!-- Email Step -->
+    <div class="form_step is-active" data-step="1">
+      <div class="form_input-wrapper">
+        <input type="email" class="form_input" ts-email placeholder="Email Address">
+      </div>
+      <div class="form_button-wrapper">
+        <button class="form_button button_next" ts-next>Next</button>
+      </div>
+    </div>
+
+    <!-- Dynamic Steps -->
+    <div class="form_step" data-step="2">
+      <div class="form_input-wrapper">
+        <input type="text" class="form_input" ts-dynamic placeholder="First Name">
+      </div>
+      <div class="form_button-wrapper">
+        <button class="form_button button_next" ts-submit>Submit</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Visualization Component -->
+  <div class="component_visualizations">
+    <div class="tabs_menu">
+      <button class="tab_button is-active" ts-tab="crm">CRM View</button>
+      <button class="tab_button" ts-tab="pipeline">Sales Pipeline</button>
+      <button class="tab_button" ts-tab="card">Business Card</button>
+    </div>
+    
+    <div class="tabs_content">
+      <!-- CRM View -->
+      <div class="tab_content is-active" ts-content="crm">
+        <div class="crm_contact">
+          <div class="crm_field">
+            <div class="crm_label">Email</div>
+            <div class="crm_value" ts-crm-email>-</div>
+          </div>
+          <div class="crm_field">
+            <div class="crm_label">First Name</div>
+            <div class="crm_value" ts-crm-firstName>-</div>
+          </div>
+          <div class="crm_field">
+            <div class="crm_label">Last Name</div>
+            <div class="crm_value" ts-crm-lastName>-</div>
+          </div>
+          <div class="crm_field">
+            <div class="crm_label">Company</div>
+            <div class="crm_value" ts-crm-companyName>-</div>
+          </div>
+          <div class="crm_field">
+            <div class="crm_label">Job Title</div>
+            <div class="crm_value" ts-crm-jobTitle>-</div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Pipeline View -->
+      <div class="tab_content" ts-content="pipeline">
+        <div class="pipeline_board">
+          <div class="pipeline_column">
+            <div class="pipeline_header">Unqualified Lead</div>
+            <div class="pipeline_cards" ts-pipeline="unqualified"></div>
+          </div>
+          <div class="pipeline_column">
+            <div class="pipeline_header">Marketing Qualified</div>
+            <div class="pipeline_cards" ts-pipeline="marketing"></div>
+          </div>
+          <div class="pipeline_column">
+            <div class="pipeline_header">Sales Qualified</div>
+            <div class="pipeline_cards" ts-pipeline="sales"></div>
+          </div>
+          <div class="pipeline_column">
+            <div class="pipeline_header">Opportunity</div>
+            <div class="pipeline_cards" ts-pipeline="opportunity"></div>
+          </div>
+          <div class="pipeline_column">
+            <div class="pipeline_header">Customer</div>
+            <div class="pipeline_cards" ts-pipeline="customer"></div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Business Card View -->
+      <div class="tab_content" ts-content="card">
+        <div class="business_card">
+          <div class="card_name" ts-card-name>-</div>
+          <div class="card_title" ts-card-title>-</div>
+          <div class="card_company" ts-card-company>-</div>
+          <div class="card_email" ts-card-email>-</div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="loading-overlay">
+  <div class="loading-content">
+    <div class="loading-spinner"></div>
+    <div class="loading-text">Updating...</div>
+  </div>
+</div>
+<div class="page-refresh"></div> 
