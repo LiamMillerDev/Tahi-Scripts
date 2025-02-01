@@ -4,12 +4,21 @@
   "description": "Collection of utility functions for Webflow projects",
   "main": "index.js",
   "scripts": {
-    "build": "node build.js"
+    "build": "node build.js",
+    "prebuild": "rm -rf dist/*",
+    "postbuild": "git add dist && git commit -m 'chore: update dist files' || true",
+    "prepublish": "npm run build"
   },
   "repository": {
     "type": "git",
     "url": "git+https://github.com/LiamMillerDev/Tahi-Scripts.git"
   },
+  "publishConfig": {
+    "access": "public"
+  },
+  "files": [
+    "dist"
+  ],
   "keywords": [
     "webflow",
     "utilities",
