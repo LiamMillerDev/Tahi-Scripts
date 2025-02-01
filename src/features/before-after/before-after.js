@@ -1,7 +1,7 @@
 /**
  * Before-After Comparison
  * A lightweight image comparison system for Webflow
- * @version 1.0.2
+ * @version 1.0.3
  * @author Liam Miller
  * @repository https://github.com/LiamMillerDev/Tahi-Scripts
  */
@@ -14,6 +14,11 @@ class BeforeAfter {
     this.afterEl = this.wrapper.querySelector('[ts-after]');
     this.sliderEl = this.wrapper.querySelector('[ts-slider]');
     
+    // Debug info
+    if (!this.beforeEl) console.warn('BeforeAfter: Missing [ts-before] element');
+    if (!this.afterEl) console.warn('BeforeAfter: Missing [ts-after] element');
+    if (!this.sliderEl) console.warn('BeforeAfter: Missing [ts-slider] element');
+    
     // Configuration
     this.config = {
       direction: this.wrapper.getAttribute('ts-direction') || 'vertical',
@@ -24,18 +29,61 @@ class BeforeAfter {
     this.state = {
       isDragging: false,
       position: this.config.initialPosition,
-      bounds: null
+      bounds: null,
+      initialized: false
     };
     
-    // Initialize if all required elements exist
-    if (this.beforeEl?.querySelector('img') && this.afterEl?.querySelector('img') && this.sliderEl) {
-      this.init();
-    } else {
-      console.warn('BeforeAfter: Missing required elements (container, before/after images, or slider)');
+    // Initialize if elements exist
+    if (this.beforeEl && this.afterEl && this.sliderEl) {
+      // Wait for images to load
+      this.waitForImages().then(() => {
+        this.init();
+      }).catch(err => {
+        console.warn('BeforeAfter: Error loading images -', err);
+      });
     }
   }
   
+  waitForImages() {
+    return new Promise((resolve, reject) => {
+      const beforeImg = this.beforeEl.querySelector('img');
+      const afterImg = this.afterEl.querySelector('img');
+      
+      if (!beforeImg) {
+        reject('Missing before image');
+        return;
+      }
+      if (!afterImg) {
+        reject('Missing after image');
+        return;
+      }
+      
+      let loadedImages = 0;
+      const checkLoaded = () => {
+        loadedImages++;
+        if (loadedImages === 2) resolve();
+      };
+      
+      if (beforeImg.complete) checkLoaded();
+      else beforeImg.onload = checkLoaded;
+      
+      if (afterImg.complete) checkLoaded();
+      else afterImg.onload = checkLoaded;
+      
+      // Fallback if images fail to load
+      setTimeout(() => {
+        if (loadedImages < 2) {
+          console.warn('BeforeAfter: Image load timeout - proceeding anyway');
+          resolve();
+        }
+      }, 2000);
+    });
+  }
+  
   init() {
+    if (this.state.initialized) return;
+    this.state.initialized = true;
+    
     // Only set essential styles
     this.wrapper.style.position = 'relative';
     this.wrapper.style.overflow = 'hidden';
@@ -194,9 +242,19 @@ class BeforeAfter {
   }
 }
 
-// Auto-initialize
+// Auto-initialize with a small delay to ensure DOM is ready
 document.addEventListener('DOMContentLoaded', () => {
+  // First attempt
+  initializeComparisons();
+  
+  // Second attempt after a delay (for dynamic content)
+  setTimeout(initializeComparisons, 1000);
+});
+
+function initializeComparisons() {
   document.querySelectorAll('[ts-compare="true"]').forEach(element => {
-    new BeforeAfter(element);
+    if (!element.beforeAfter) {
+      element.beforeAfter = new BeforeAfter(element);
+    }
   });
-}); 
+} 
