@@ -1,0 +1,408 @@
+<style>
+/* Adventure Flow Styles */
+.section_adventure-flow {
+  position: relative;
+  padding: 4rem 2rem;
+  max-width: 1200px;
+  margin: 0 auto;
+  min-height: 800px;
+}
+
+@media (max-width: 768px) {
+  .section_adventure-flow {
+    padding: 3rem 1rem;
+    min-height: auto;
+  }
+}
+
+/* Start Connector */
+.connector_start {
+  width: 24px;
+  height: 24px;
+  background: #4299e1;
+  border-radius: 50%;
+  position: absolute;
+  top: 2rem;
+  left: 50%;
+  transform: translateX(-50%);
+  z-index: 2;
+}
+
+.connector_start::after {
+  content: '';
+  position: absolute;
+  top: -4px;
+  left: -4px;
+  right: -4px;
+  bottom: -4px;
+  border-radius: 50%;
+  border: 2px solid #4299e1;
+  opacity: 0;
+  animation: pulse 2s ease-out infinite;
+}
+
+@keyframes pulse {
+  0% {
+    transform: scale(1);
+    opacity: 0.8;
+  }
+  100% {
+    transform: scale(2);
+    opacity: 0;
+  }
+}
+
+/* Path Layer */
+.path_layer {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  z-index: 0;
+  pointer-events: none;
+}
+
+/* Mouse Path */
+.path_mouse {
+  stroke: #4299e1;
+  stroke-width: 2;
+  stroke-dasharray: 4 4;
+  fill: none;
+  opacity: 0.6;
+}
+
+.path_connection {
+  stroke: #4299e1;
+  stroke-width: 2;
+  stroke-dasharray: 4 4;
+  fill: none;
+  opacity: 0;
+  transition: opacity 0.3s ease;
+}
+
+.path_connection.is-active {
+  opacity: 1;
+}
+
+/* Tier Wrapper */
+.tier_wrapper {
+  display: flex;
+  gap: 2rem;
+  margin: 4rem 0;
+  position: relative;
+  justify-content: center;
+}
+
+@media (max-width: 768px) {
+  .tier_wrapper {
+    flex-direction: column;
+    gap: 1rem;
+    margin: 2rem 0;
+  }
+}
+
+/* Card Groups */
+.card_group {
+  display: none;
+  width: 100%;
+  opacity: 0;
+  transition: opacity 0.3s ease;
+}
+
+.card_group.is-active {
+  display: flex;
+  gap: 2rem;
+  opacity: 1;
+}
+
+@media (max-width: 768px) {
+  .card_group.is-active {
+    flex-direction: column;
+    gap: 1rem;
+  }
+}
+
+/* Selection Cards */
+.card_selection {
+  flex: 1;
+  min-width: 280px;
+  background: #ffffff;
+  border: 2px solid #e2e8f0;
+  border-radius: 12px;
+  padding: 2rem;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  position: relative;
+  overflow: hidden;
+  z-index: 1;
+}
+
+.card_selection:hover {
+  border-color: #4299e1;
+  transform: translateY(-2px);
+  box-shadow: 0 4px 6px rgba(66, 153, 225, 0.1);
+}
+
+.card_selection.is-active {
+  border-color: #4299e1;
+  background: #ebf8ff;
+}
+
+.card_selection.is-disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+  pointer-events: none;
+}
+
+/* Card Content */
+.card_content {
+  text-align: center;
+}
+
+.card_title {
+  font-size: 1.25rem;
+  font-weight: 600;
+  color: #2d3748;
+  margin-bottom: 1rem;
+}
+
+.card_description {
+  color: #4a5568;
+  line-height: 1.5;
+}
+
+/* Pricing Cards */
+.card_pricing {
+  text-align: center;
+  padding: 2rem;
+}
+
+.pricing_amount {
+  font-size: 2.5rem;
+  font-weight: 700;
+  color: #2d3748;
+  margin-bottom: 1rem;
+}
+
+.pricing_period {
+  color: #718096;
+  font-size: 0.875rem;
+}
+
+.pricing_features {
+  margin: 2rem 0;
+  text-align: left;
+}
+
+.feature_item {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  margin-bottom: 0.75rem;
+  color: #4a5568;
+}
+
+.feature_item::before {
+  content: '✓';
+  color: #48bb78;
+  font-weight: bold;
+}
+
+/* State Classes */
+.is-hidden {
+  display: none !important;
+}
+
+.is-faded {
+  opacity: 0.5;
+}
+
+.is-highlighted::after {
+  content: '';
+  position: absolute;
+  top: -4px;
+  left: -4px;
+  right: -4px;
+  bottom: -4px;
+  border: 2px solid #4299e1;
+  border-radius: 14px;
+  animation: highlight 1s ease infinite;
+}
+
+@keyframes highlight {
+  0%, 100% { opacity: 0.4; }
+  50% { opacity: 0.8; }
+}
+
+/* Mobile Optimizations */
+@media (max-width: 480px) {
+  .card_selection {
+    min-width: auto;
+    padding: 1.5rem;
+  }
+  
+  .card_title {
+    font-size: 1.125rem;
+  }
+  
+  .pricing_amount {
+    font-size: 2rem;
+  }
+}
+</style>
+
+<!-- Adventure Flow Section -->
+<div class="section_adventure-flow">
+  <!-- Start Connector -->
+  <div class="connector_start"></div>
+  
+  <!-- SVG Path Layer -->
+  <svg class="path_layer">
+    <path class="path_mouse" d=""></path>
+    <!-- Connection paths will be added dynamically -->
+  </svg>
+  
+  <!-- First Tier -->
+  <div class="tier_wrapper" data-tier="1">
+    <div class="card_selection" ts-option="personal">
+      <div class="card_content">
+        <h3 class="card_title">For Me</h3>
+        <p class="card_description">Personal solutions tailored to individual needs</p>
+      </div>
+    </div>
+    
+    <div class="card_selection" ts-option="business">
+      <div class="card_content">
+        <h3 class="card_title">For My Business</h3>
+        <p class="card_description">Scalable solutions for growing businesses</p>
+      </div>
+    </div>
+    
+    <div class="card_selection" ts-option="agency">
+      <div class="card_content">
+        <h3 class="card_title">For My Agency</h3>
+        <p class="card_description">Enterprise-grade agency solutions</p>
+      </div>
+    </div>
+  </div>
+  
+  <!-- Second Tier -->
+  <div class="tier_wrapper" data-tier="2">
+    <!-- Personal Options -->
+    <div class="card_group" ts-parent="personal">
+      <div class="card_selection" ts-option="personal-1">
+        <div class="card_content">
+          <h3 class="card_title">Getting Started</h3>
+          <p class="card_description">Perfect for beginners</p>
+        </div>
+      </div>
+      
+      <div class="card_selection" ts-option="personal-2">
+        <div class="card_content">
+          <h3 class="card_title">Going Pro</h3>
+          <p class="card_description">Advanced features for power users</p>
+        </div>
+      </div>
+      
+      <div class="card_selection" ts-option="personal-3">
+        <div class="card_content">
+          <h3 class="card_title">Master Suite</h3>
+          <p class="card_description">Complete solution for experts</p>
+        </div>
+      </div>
+    </div>
+    
+    <!-- Business Options -->
+    <div class="card_group" ts-parent="business">
+      <div class="card_selection" ts-option="business-1">
+        <div class="card_content">
+          <h3 class="card_title">Startup</h3>
+          <p class="card_description">Essential tools for small teams</p>
+        </div>
+      </div>
+      
+      <div class="card_selection" ts-option="business-2">
+        <div class="card_content">
+          <h3 class="card_title">Growth</h3>
+          <p class="card_description">Scaling solutions for medium businesses</p>
+        </div>
+      </div>
+      
+      <div class="card_selection" ts-option="business-3">
+        <div class="card_content">
+          <h3 class="card_title">Enterprise</h3>
+          <p class="card_description">Full-featured business suite</p>
+        </div>
+      </div>
+    </div>
+    
+    <!-- Agency Options -->
+    <div class="card_group" ts-parent="agency">
+      <div class="card_selection" ts-option="agency-1">
+        <div class="card_content">
+          <h3 class="card_title">Agency Starter</h3>
+          <p class="card_description">Perfect for new agencies</p>
+        </div>
+      </div>
+      
+      <div class="card_selection" ts-option="agency-2">
+        <div class="card_content">
+          <h3 class="card_title">Agency Pro</h3>
+          <p class="card_description">Advanced agency tools</p>
+        </div>
+      </div>
+      
+      <div class="card_selection" ts-option="agency-3">
+        <div class="card_content">
+          <h3 class="card_title">Agency Enterprise</h3>
+          <p class="card_description">Complete agency solution</p>
+        </div>
+      </div>
+    </div>
+  </div>
+  
+  <!-- Third Tier (Pricing) -->
+  <div class="tier_wrapper" data-tier="3">
+    <!-- Example pricing cards (repeat pattern for all options) -->
+    <div class="card_group" ts-parent="personal-1">
+      <div class="card_selection">
+        <div class="card_pricing">
+          <div class="pricing_amount">$29</div>
+          <div class="pricing_period">per month</div>
+          <div class="pricing_features">
+            <div class="feature_item">Basic Feature 1</div>
+            <div class="feature_item">Basic Feature 2</div>
+            <div class="feature_item">Basic Feature 3</div>
+          </div>
+        </div>
+      </div>
+      
+      <div class="card_selection">
+        <div class="card_pricing">
+          <div class="pricing_amount">$49</div>
+          <div class="pricing_period">per month</div>
+          <div class="pricing_features">
+            <div class="feature_item">Pro Feature 1</div>
+            <div class="feature_item">Pro Feature 2</div>
+            <div class="feature_item">Pro Feature 3</div>
+          </div>
+        </div>
+      </div>
+      
+      <div class="card_selection">
+        <div class="card_pricing">
+          <div class="pricing_amount">$99</div>
+          <div class="pricing_period">per month</div>
+          <div class="pricing_features">
+            <div class="feature_item">Premium Feature 1</div>
+            <div class="feature_item">Premium Feature 2</div>
+            <div class="feature_item">Premium Feature 3</div>
+          </div>
+        </div>
+      </div>
+    </div>
+    
+    <!-- Add more pricing groups for other options -->
+  </div>
+</div> 
