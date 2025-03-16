@@ -5,7 +5,11 @@
 Add the script to your Webflow project's before `</body>` tag:
 
 ```html
-<script src="https://cdn.jsdelivr.net/gh/LiamMillerDev/Tahi-Scripts/dist/auto-accordions.js"></script>
+<!-- Latest version (recommended) -->
+<script src="https://cdn.jsdelivr.net/gh/LiamMillerDev/Tahi-Scripts@main/dist/auto-accordions.js"></script>
+
+<!-- Or use a specific commit version for stability -->
+<script src="https://cdn.jsdelivr.net/gh/LiamMillerDev/Tahi-Scripts@a67ebfd/dist/auto-accordions.js"></script>
 ```
 
 ## Overview
