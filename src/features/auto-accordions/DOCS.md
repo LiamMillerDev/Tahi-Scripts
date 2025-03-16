@@ -5,7 +5,7 @@
 Add the script to your Webflow project's before `</body>` tag:
 
 ```html
-<script src="https://cdn.jsdelivr.net/gh/tahistudio/webflow-scripts@latest/auto-accordion.js"></script>
+<script src="https://cdn.jsdelivr.net/gh/tahistudio/webflow-scripts@latest/auto-accordions.js"></script>
 ```
 
 ## Overview

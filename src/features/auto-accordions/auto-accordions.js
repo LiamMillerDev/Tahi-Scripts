@@ -1,5 +1,5 @@
 /**
- * Auto Accordion
+ * Auto Accordions
  * A lightweight solution for ensuring only one accordion is open at a time
  * @version 1.0.0
  * @author Liam Miller
