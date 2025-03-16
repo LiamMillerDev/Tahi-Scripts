@@ -1,53 +1,41 @@
-# Auto Accordions - Implementation Plan
+# Auto Accordion - Implementation Plan
 
 ## Feature Overview
-A lightweight, performant accordion system for Webflow with attribute-based configuration, smooth transitions, and responsive behavior.
+A lightweight solution that leverages Webflow's built-in interactions while ensuring only one accordion is open at a time in each section.
 
 ## Technical Requirements
 - Vanilla JavaScript implementation (no dependencies)
-- Support for multiple instances on same page
-- CSS variable-based theming
-- Smooth height transitions
-- Responsive behavior (mobile/tablet/desktop modes)
-- Proper handling of images within accordion contents
+- Works with Webflow's native accordion behavior
+- Uses attribute-based selectors for flexibility
+- Minimal DOM manipulation
+- Support for multiple accordion groups on same page
 
 ## Implementation Strategy
 
 ### Configuration Attributes
 ```javascript
 {
-  'ts-accordions': boolean,        // Enable auto-accordions functionality
-  'ts-transition-speed': number,   // Transition speed in milliseconds (default: 200)
-  'ts-mobile-only': boolean,       // Only activate on mobile/tablet (default: true)
-  'ts-mobile-breakpoint': number,  // Mobile breakpoint in pixels (default: 990)
-  'ts-default-open': number,       // Index of initially open accordion (default: 0)
-  'ts-allow-all-closed': boolean,  // Allow all accordions to be closed (default: false)
+  'ts-auto-accordion': boolean,       // Enable auto-accordion functionality (true)
+  'ts-accordion-item': string/empty,  // Marks an accordion item (optional value "first" to set default)
+  'ts-accordion-header': empty,       // Marks the clickable header
+  'ts-accordion-content': empty       // Marks the expandable content
 }
 ```
 
-### Performance Considerations
-- Use ResizeObserver for dynamic height calculations
-- Passive event listeners where appropriate
-- Minimal DOM operations
-- CSS transitions over JavaScript animations
-- Efficient resize handling with debouncing
-- Memory leak prevention
-- Smart image loading strategy
+### Core Functionality
+1. Detect clicks on accordion headers
+2. When opening a new accordion, simulate a click to close any currently open accordion
+3. Let Webflow handle all animations and state management
+4. Keep track of the currently open accordion in each container
 
-### Accessibility Considerations
-- Keyboard navigation
-- ARIA attributes
-- Focus management
-- Screen reader support
+### Performance Considerations
+- Event delegation (one listener per container)
+- Minimal DOM manipulation
+- Leverages existing Webflow animations
+- No custom height calculations or transitions
+- No CSS dependencies
+- Small file size (~1KB unminified)
 
 ### Browser Support
 - Modern browsers (last 2 versions)
-- Minimal fallback for older browsers
-
-### Testing Strategy
-- Multiple instances testing
-- Memory leak testing
-- Animation performance testing
-- Image loading performance
-- Responsive behavior testing
-- Accessibility testing 
+- No special polyfills needed 
